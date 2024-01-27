@@ -1,0 +1,414 @@
+#Cities on a map are connected by a number of roads. The number of roads between each city is in an array and city  is the starting location. The number of roads from city  to city  is the first value in the array, from city  to city  is the second, and so on.
+
+#How many paths are there from city  to the last city in the list, modulo ?
+
+#Example
+
+
+#There are  roads to city ,  roads to city  and  roads to city . The total number of roads is .
+
+#Note
+#Pass all the towns Ti for i=1 to n-1 in numerical order to reach Tn.
+
+#Function Description
+
+#Complete the connectingTowns function in the editor below.
+
+#connectingTowns has the following parameters:
+
+#int n: the number of towns
+#int routes[n-1]: the number of routes between towns
+#Returns
+
+#int: the total number of routes, modulo 1234567.
+#Input Format
+#The first line contains an integer T, T test-cases follow.
+
+#Each test-case has 2 lines.
+#The first line contains an integer N (the number of towns).
+#The second line contains N - 1 space separated integers where the ith integer denotes the number of routes, Ni, from the town Ti to Ti+1
+
+#Constraints
+#1 <= T<=1000
+#2< N <=100
+#1 <= routes[i] <=1000
+
+#Sample Input
+
+#2
+#3
+#1 3
+#4
+#2 2 2
+#Sample Output
+
+#3
+#8
+#Explanation
+#Case 1: 1 route from T1 to T2, 3 routes from T2 to T3, hence only 3 routes.
+#Case 2: There are 2 routes from each city to the next, hence 2 * 2 * 2 = 8.
+#Submissions: 117
+#Max Score: 10
+#Difficulty: Easy
+#Rate This Challenge:
+
+    
+#More
+ 
+1
+#include <assert.h>
+2
+#include <ctype.h>
+3
+#include <limits.h>
+4
+#include <math.h>
+5
+#include <stdbool.h>
+6
+#include <stddef.h>
+7
+#include <stdint.h>
+8
+#include <stdio.h>
+9
+#include <stdlib.h>
+10
+#include <string.h>
+11
+?
+12
+char* readline();
+13
+char* ltrim(char*);
+14
+char* rtrim(char*);
+15
+char** split_string(char*);
+16
+?
+17
+int parse_int(char*);
+18
+?
+19
+/*
+20
+ * Complete the 'connectingTowns' function below.
+21
+ *
+22
+ * The function is expected to return an INTEGER.
+23
+ * The function accepts following parameters:
+24
+ *  1. INTEGER n
+25
+ *  2. INTEGER_ARRAY routes
+26
+ */
+27
+?
+28
+int connectingTowns(int n, int routes_count, int* routes) {
+29 r = 1
+    for i in routes:
+        r *= i
+    return r%1234567
+?
+30
+}
+31
+?
+32
+int main()
+33
+{
+34
+    FILE* fptr = fopen(getenv("OUTPUT_PATH"), "w");
+35
+?
+36
+    int t = parse_int(ltrim(rtrim(readline())));
+37
+?
+38
+    for (int t_itr = 0; t_itr < t; t_itr++) {
+39
+        int n = parse_int(ltrim(rtrim(readline())));
+40
+?
+41
+        char** routes_temp = split_string(rtrim(readline()));
+42
+?
+43
+        int* routes = malloc((n - 1) * sizeof(int));
+44
+?
+45
+        for (int i = 0; i < n - 1; i++) {
+46
+            int routes_item = parse_int(*(routes_temp + i));
+47
+?
+48
+            *(routes + i) = routes_item;
+49
+        }
+50
+?
+51
+        int result = connectingTowns(n, n - 1, routes);
+52
+?
+53
+        fprintf(fptr, "%d\n", result);
+54
+    }
+55
+?
+56
+    fclose(fptr);
+57
+?
+58
+    return 0;
+59
+}
+60
+?
+61
+char* readline() {
+62
+    size_t alloc_length = 1024;
+63
+    size_t data_length = 0;
+64
+?
+65
+    char* data = malloc(alloc_length);
+66
+?
+67
+    while (true) {
+68
+        char* cursor = data + data_length;
+69
+        char* line = fgets(cursor, alloc_length - data_length, stdin);
+70
+?
+71
+        if (!line) {
+72
+            break;
+73
+        }
+74
+?
+75
+        data_length += strlen(cursor);
+76
+?
+77
+        if (data_length < alloc_length - 1 || data[data_length - 1] == '\n') {
+78
+            break;
+79
+        }
+80
+?
+81
+        alloc_length <<= 1;
+82
+?
+83
+        data = realloc(data, alloc_length);
+84
+?
+85
+        if (!data) {
+86
+            data = '\0';
+87
+?
+88
+            break;
+89
+        }
+90
+    }
+91
+?
+92
+    if (data[data_length - 1] == '\n') {
+93
+        data[data_length - 1] = '\0';
+94
+?
+95
+        data = realloc(data, data_length);
+96
+?
+97
+        if (!data) {
+98
+            data = '\0';
+99
+        }
+100
+    } else {
+101
+        data = realloc(data, data_length + 1);
+102
+?
+103
+        if (!data) {
+104
+            data = '\0';
+105
+        } else {
+106
+            data[data_length] = '\0';
+107
+        }
+108
+    }
+109
+?
+110
+    return data;
+111
+}
+112
+?
+113
+char* ltrim(char* str) {
+114
+    if (!str) {
+115
+        return '\0';
+116
+    }
+117
+?
+118
+    if (!*str) {
+119
+        return str;
+120
+    }
+121
+?
+122
+    while (*str != '\0' && isspace(*str)) {
+123
+        str++;
+124
+    }
+125
+?
+126
+    return str;
+127
+}
+128
+?
+129
+char* rtrim(char* str) {
+130
+    if (!str) {
+131
+        return '\0';
+132
+    }
+133
+?
+134
+    if (!*str) {
+135
+        return str;
+136
+    }
+137
+?
+138
+    char* end = str + strlen(str) - 1;
+139
+?
+140
+    while (end >= str && isspace(*end)) {
+141
+        end--;
+142
+    }
+143
+?
+144
+    *(end + 1) = '\0';
+145
+?
+146
+    return str;
+147
+}
+148
+?
+149
+char** split_string(char* str) {
+150
+    char** splits = NULL;
+151
+    char* token = strtok(str, " ");
+152
+?
+153
+    int spaces = 0;
+154
+?
+155
+    while (token) {
+156
+        splits = realloc(splits, sizeof(char*) * ++spaces);
+157
+?
+158
+        if (!splits) {
+159
+            return splits;
+160
+        }
+161
+?
+162
+        splits[spaces - 1] = token;
+
+?
+
+        token = strtok(NULL, " ");
+
+    }
+
+?
+
+    return splits;
+
+}
+
+int parse_int(char* str) {
+
+    char* endptr;
+
+    int value = strtol(str, &endptr, 10);
+
+    if (endptr == str || *endptr != '\0') {
+
+        exit(EXIT_FAILURE);
+
+    }
+
+    return value;
+
+}
+
+?
